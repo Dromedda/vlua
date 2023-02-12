@@ -51,8 +51,6 @@ function parse_file(_file_path)
 	end
 	local output_index = 1
 	for i = 1, #output, 1 do
-		-- check if they are the same
-		-- if they are not add the output line to ret and increate the index for output by one
 		if (output[output_index] ~= lines_from_file[i]) then 
 			table.insert(ret, output[output_index])
 			output_index = output_index + 1
