@@ -5,11 +5,11 @@ scene_test.init = fn()
 	if a != 1 then 
 		print("A IS NOT 1")
 	end
-	print("FUCK U World!")
+	print("HI MOM!")
 end
 
 fn scream() 
-	print("FAKKA YOU TOOO!")
+	print("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
 end
 
 scene_test.init()
