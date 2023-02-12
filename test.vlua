@@ -1,0 +1,17 @@
+local scene_test = {}
+
+scene_test.init = fn()
+	local a = 2
+	if a != 1 then 
+		print("A IS NOT 1")
+	end
+	print("FUCK U World!")
+end
+
+fn scream() 
+	print("FAKKA YOU TOOO!")
+end
+
+scene_test.init()
+scream()
+return scene_test
