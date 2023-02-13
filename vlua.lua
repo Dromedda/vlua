@@ -1,68 +1,70 @@
 -- VLUA 
--- Made By Erik Dromedda Gustafsson
+-- By Erik "Dromedda" Gustafsson
 
 local operations = {}
 operations["!="] = "~="
 operations["fn"] = "function"
 operations["import"]   = "require"
+operations["let"] = "local"
 
 local search_patterns = {}
 search_patterns["!="] = "!="
 search_patterns["fn"] = "fn"
 search_patterns["import"] = "import"
+search_patterns["let"] = "let"
 
 function parse(_path, _target)
 	if (_path == ".") then 
 		error("Directory compilation is not implemented yet")
 	else 
-		local output = generate_output(_path, _target)
-		print("Output:")
-		for k, v in pairs(output) do 
-			print(v)
-		end
-
-		print("Use: lua ".. _target.. " ")
-		print("to run the program")
+		print("Path: ".. _path, "Target: ".. _target)
+		generate_output(_path, _target)
+		print("Use: lua ".. _target)
+		print("To run the program")
 	end
 end
 
 function generate_output(_file, _target)
+	print("Reading Source File: ".. _file)
 	local ret = parse_file(_file)
+	print("Writing to file... ".. _target)
 	local file =	io.open(_target, "w")
 	local string_output = ""
 	for _, v in pairs(ret) do 
-		string_output = string_output.. v.. ";"
+		-- NOTE: This is the hex for LF, i.e. it doesnt work on windows(?) because windows use CR-LF
+		string_output = string_output.. v.. string.format("%-5s", "\x0A")
 	end
 	file:write(string_output)
 	file:close()
+	print("Success!")
 	return ret	
 end
 
 function parse_file(_file_path)	
 	local lines_from_file = lines_from(_file_path)
-	local output = {}
+	local modified_return = {}
 	local ret = {}
 	for _,line in pairs(lines_from_file) do 
-		local tokens = get_tokens(line)
+		local tokens = tokenize(line)
 		for _, token in pairs(tokens) do
-			table.insert(output, token)
+			table.insert(modified_return, token)
 		end
-		table.insert(output, line)
+		table.insert(modified_return, line)
 	end
-	local output_index = 1
-	for i = 1, #output, 1 do
-		if (output[output_index] ~= lines_from_file[i]) then 
-			table.insert(ret, output[output_index])
-			output_index = output_index + 1
+	local modified_return_index = 1
+	for i = 1, #modified_return, 1 do
+		if (modified_return[modified_return_index] ~= lines_from_file[i]) then 
+			table.insert(ret, modified_return[modified_return_index])
+			modified_return_index = modified_return_index + 1
 		else 
 			table.insert(ret, lines_from_file[i])
 		end
-		output_index = output_index + 1
+		modified_return_index = modified_return_index + 1
 	end
 	return ret
 end
 
-function get_tokens(_line)
+function tokenize(_line)
 	local result = {}
 	for k, v in pairs(search_patterns) do 
 		local new_line = string.gsub(_line, v, operations[k])
