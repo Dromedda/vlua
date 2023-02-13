@@ -67,12 +67,16 @@ end
 function tokenize(_line)
 	local result = {}
 	for k, v in pairs(search_patterns) do 
-		local new_line = string.gsub(_line, v, operations[k])
+		local new_line = string.gsub(_line, v, translate(k))
 		if (new_line ~= _line) then
 			table.insert(result, new_line)
 		end
 	end
 	return result
+end
+
+function translate(_token)
+	return operations[_token]
 end
 
 function file_exists(_file)
