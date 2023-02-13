@@ -1,0 +1,1 @@
+os.execute("luastatic ".. arg[1].. " -llua5.2 -I/usr/include/lua5.2")

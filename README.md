@@ -20,6 +20,9 @@ let = local
 import = require
 ```
 
+## Things that dont work: 
+- all instances of the keywords gets replaced 
+
 ## Todo:
 - [ ] allow the user to pass a directory as the path argument
 - [ ] if no target is provided, it should automatically create a build folder, and put everything in there
